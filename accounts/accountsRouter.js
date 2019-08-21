@@ -30,10 +30,30 @@ router.post('/', async (req, res) => {
 
     try {
         const account = await knex('accounts').insert(accountData);
-        res.status(201).json(account);
+        if(account) {
+            res.status(201).json({ message: "Account successfully created!" });
+        } else {
+            res.status(404).json({ message: "Account ID not found" });
+        }
     } catch (error) {
         res.status(500).json({ message: "Account could not be created" });
     }
-})
+});
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const accountChanges = req.body;
+
+    try {
+        const changes = await knex('accounts').where({ id }).update(accountChanges);
+        if(changes) {
+            res.status(201).json({ message: "Account successfully updated!" });
+        } else {
+            res.status(404).json({ message: "Account ID not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error updating account" });
+    }
+});
 
 module.exports = router;
