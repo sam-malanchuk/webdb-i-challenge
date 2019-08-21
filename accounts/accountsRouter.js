@@ -7,10 +7,21 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const accounts = await knex('accounts');
-        console.log(accounts);
         res.json(accounts);
     } catch (error) {
         res.status(500).json({ message: "Error getting accounts"});
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const accounts = await knex('accounts').where({ id });
+        const account = accounts[0];
+        res.json(account);
+    } catch (error) {
+        res.status(500).json({ message: "Error getting account"});
     }
 });
 
