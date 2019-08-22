@@ -56,4 +56,19 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deleted = await knex('accounts').where({ id }).del();
+        if(deleted) {
+            res.status(200).json({ message: "Account successfully deleted!" });
+        } else {
+            res.status(404).json({ message: "Account ID not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting account" });
+    }
+});
+
 module.exports = router;
