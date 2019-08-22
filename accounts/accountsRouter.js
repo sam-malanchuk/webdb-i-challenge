@@ -19,7 +19,12 @@ router.get('/:id', async (req, res) => {
     try {
         const accounts = await knex('accounts').where({ id });
         const account = accounts[0];
-        res.json(account);
+        console.log(account);
+        if(account) {
+            res.status(201).json(account);
+        } else {
+            res.status(404).json({ message: "Account ID not found" });
+        }
     } catch (error) {
         res.status(500).json({ message: "Error getting account"});
     }
